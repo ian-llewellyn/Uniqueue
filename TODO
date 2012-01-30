@@ -1,0 +1,3 @@
+CPU Usage is very high
+- Implement SIGCHLD handler
+- Use as much !O_NONBLOCK on fgets as possible
