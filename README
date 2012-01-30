@@ -1,0 +1,35 @@
+Uniqueue
+========
+
+Take this bash example:
+inotify-tools | while read line ; do
+	rsync $line remote:$line &
+done
+
+The problem:
+For every file that's changed, a new rsync process is spawned in the
+background. That's fine, except when some files are repeatedly accessed and
+they're in the same directory. In that case, you have multiple rsync instances
+'fighting' with each other to get their job done. You can potentially run out
+of PIDs.
+
+The solution:
+Uniqueue can be put in place to ensure that only one rsync process per
+directory will be executed. If there are more updates to the directory, those
+rsync requests will be gathered as one and queued for execution in sequence.
+
+Usage:
+uniqueue -e program [-v]
+
+Further explanation:
+Every message that arrives on the queue is assessed for uniqness. If a matching
+message is already waiting on the queue, the latest message is discarded.
+
+For every message that is waiting on the queue, a program - specified on the
+command line - is executed, with message as it's sole argument. At the point of
+execution, the message is removed from the queue allowing another matching
+message to enter into waiting on the queue.
+
+No more than one process will be spawned for any unique message that enters the
+queue.
+
