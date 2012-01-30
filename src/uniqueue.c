@@ -158,8 +158,10 @@ int main(int argc, char **argv) {
 					// This is the child
 					pid = getpid();
 					printf("I am a new child at pid: %d\n", pid);
-					sleep(10);
-					exit(EXIT_SUCCESS);
+					char command[1024];
+					sprintf(command, "%s %s", executable, r.record_name);
+					int ret = system(command);
+					exit(ret);
 				} else if ( cpid == -1 ) {
 					// Fork failed
 					fprintf(stderr, "Fork failed\n");

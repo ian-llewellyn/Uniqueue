@@ -2,7 +2,7 @@ Uniqueue
 ========
 
 Take this bash example:
-inotify-tools | while read line ; do
+inotifywait -mrq --format %w | while read line ; do
 	rsync $line remote:$line &
 done
 
